@@ -28,6 +28,8 @@ function start_game()
     -- offset for move anim
     p_ox, p_oy = 0,0
     p_sox, p_soy = 0,0
+    p_mov = nil
+    
     p_timer = 0
     -- flipping
     p_flip = false
@@ -40,18 +42,7 @@ end
 function update_game()
     for i = 0,3 do
         if btnp(i) then
-            local dx,dy = dir_x[i+1],dir_y[i+1]
-            if dx < 0 then
-                p_flip = true
-            elseif dx > 0 then
-                p_flip = false
-            end
-            p_x += dx
-            p_y += dy
-            p_sox, p_soy = -dx*8, -dy*8
-            p_ox, p_oy = p_sox, p_soy
-            p_timer = 0 -- reset timer
-            _upd = update_pturn
+            move_player(dir_x[i+1], dir_y[i+1])
             return
         end
     end
@@ -62,8 +53,7 @@ function update_pturn()
     -- change speed
     p_timer = min(p_timer + 0.2, 1)
 
-    p_ox = p_sox * (1 - p_timer)
-    p_oy = p_soy * (1 - p_timer)
+    p_mov()
 
     if p_timer == 1 then
         _upd=update_game
@@ -72,6 +62,22 @@ end
 
 function update_gameover()
 
+end
+
+function mov_walk()
+    p_ox = p_sox * (1 - p_timer)
+    p_oy = p_soy * (1 - p_timer)
+end
+
+-- bump against walls
+function mov_bump()
+    local time = p_timer
+
+    if p_timer > 0.5 then
+        time = 1 - p_timer
+    end
+    p_ox = p_sox * (time)
+    p_oy = p_soy * (time)
 end
 
 
@@ -108,3 +114,35 @@ end
 -------------
 -- GAMEPLAY
 -------------
+
+function move_player(dx,dy)
+    local dest_x, dest_y = p_x + dx, p_y + dy
+    local tile = mget(dest_x,dest_y)
+
+    if dx < 0 then
+        p_flip = true
+    elseif dx > 0 then
+        p_flip = false
+    end
+
+    -- check passability
+    if fget(tile,0) == true then
+        p_sox, p_soy = dx*8, dy*8
+        p_ox, p_oy = 0,0
+        p_timer = 0 -- reset timer
+
+        _upd = update_pturn
+        p_mov = mov_bump
+    else
+        p_x += dx
+        p_y += dy
+
+        p_sox, p_soy = -dx*8, -dy*8
+        p_ox, p_oy = p_sox, p_soy
+        p_timer = 0 -- reset timer
+
+        _upd = update_pturn
+        p_mov = mov_walk
+    end
+    
+end
