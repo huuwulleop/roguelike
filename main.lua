@@ -24,7 +24,7 @@ end
 
 function start_game()
     -- player coord
-    p_x, p_y = 11,6
+    p_x, p_y = 14,6
     -- offset for move anim
     p_ox, p_oy = 0,0
     p_sox, p_soy = 0,0
