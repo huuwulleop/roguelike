@@ -33,6 +33,8 @@ function start_game()
     p_timer = 0
     -- flipping
     p_flip = false
+    -- direction
+    p_dir = 0
 end
 
 
@@ -155,7 +157,7 @@ end
 function trigger_bump(tile,dest_x,dest_y)
     if tile == 7 or tile == 8 then
     -- vases
-        mset(dest_x,dest_x,1)
+        mset(dest_x,dest_y,1)
     elseif tile == 10 or tile == 12 then
     -- chests
         mset(dest_x,dest_y,tile - 1)
