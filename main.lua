@@ -1,4 +1,6 @@
+--------------
 -- MAIN LOOP
+--------------
 function _init()
     time=0
     p_anim={240,241,242,243}
@@ -23,8 +25,9 @@ function start_game()
 end
 
 
-
+------------
 -- UPDATES
+------------
 function update_game()
     if btn(0) then
         p_x -= 1
@@ -45,19 +48,30 @@ function update_gameover()
 end
 
 
-
+----------
 -- DRAWS
+----------
 function draw_game()
     cls(0)
     map()
 
-    palt(0, false)
-    --change color to yel
-    pal(6, 10)
-    spr(p_anim[flr(time/4)%4+1], p_x * 8, p_y * 8)
-    pal() --reset
+    draw_spr(get_frame(p_anim),p_x*8,p_y*8)
 end
 
 function draw_gameover()
 
+end
+
+----------
+-- TOOLS
+----------
+function get_frame(anim)
+    return anim[flr(time/6)% #anim +1]
+end
+
+function draw_spr(_spr,_x,_y,_c)
+    palt(0, false)
+    pal(6, _c) --change color
+    spr(_spr, _x, _y)
+    pal() --reset
 end
