@@ -4,12 +4,16 @@
 function _init()
     time=0
     p_anim={240,241,242,243}
+
+    dir_x={-1,1,0,0}
+    dir_y={0,0,-1,1}
+    
     _upd = update_game
     _drw = draw_game
     start_game()
 end
 
-function _update()
+function _update60()
     time+=1
     _upd()
 end
@@ -20,11 +24,11 @@ end
 
 function start_game()
     -- player coord
-    p_x = 11
-    p_y = 6
-    -- offset
-    p_ox = 0
-    p_oy = 0
+    p_x, p_y = 11,6
+    -- offset for move anim
+    p_ox, p_oy = 0,0
+    p_sox, p_soy = 0,0
+    p_timer = 0
 end
 
 
@@ -32,42 +36,28 @@ end
 -- UPDATES
 ------------
 function update_game()
-    if btn(0) then
-        p_x -= 1
-        p_ox=8
-        _upd=update_pturn
-    end
-    if btn(1) then
-        p_x += 1
-        p_ox=-8
-        _upd=update_pturn
-    end
-    if btn(2) then
-        p_y -= 1
-        p_oy=8
-        _upd=update_pturn
-    end
-    if btn(3) then
-        p_y += 1
-        p_oy=-8
-        _upd=update_pturn
+    for i = 0,3 do
+        if btnp(i) then
+            local dx,dy = dir_x[i+1],dir_y[i+1]
+            p_x += dx
+            p_y += dy
+            p_sox, p_soy = -dx*8, -dy*8
+            p_ox, p_oy = p_sox, p_soy
+            p_timer = 0 -- reset timer
+            _upd = update_pturn
+            return
+        end
     end
 end
 
+-- move anim
 function update_pturn()
-    if p_ox>0 then
-        p_ox-=1
-    end
-    if p_ox<0 then
-        p_ox+=1
-    end
-    if p_oy>0 then
-        p_oy-=1
-    end
-    if p_oy<0 then
-        p_oy+=1
-    end
-    if p_ox == 0 and p_oy == 0 then
+    p_timer = min(p_timer + 0.2, 1)
+
+    p_ox = p_sox * (1 - p_timer)
+    p_oy = p_soy * (1 - p_timer)
+
+    if p_timer == 1 then
         _upd=update_game
     end
 end
@@ -95,7 +85,7 @@ end
 -- TOOLS
 ----------
 function get_frame(anim)
-    return anim[flr(time/6)% #anim + 1]
+    return anim[flr(time/8)% #anim + 1]
 end
 
 function draw_spr(_spr,_x,_y,_c)
