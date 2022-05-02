@@ -133,6 +133,12 @@ function move_player(dx,dy)
 
         _upd = update_pturn
         p_mov = mov_bump
+
+        -- interact with objects
+        if fget(tile, 1) then
+            trigger_bump(tile,dest_x,dest_y)
+        end
+        
     else
         p_x += dx
         p_y += dy
@@ -144,5 +150,17 @@ function move_player(dx,dy)
         _upd = update_pturn
         p_mov = mov_walk
     end
-    
+end
+
+function trigger_bump(tile,dest_x,dest_y)
+    if tile == 7 or tile == 8 then
+    -- vases
+        mset(dest_x,dest_x,1)
+    elseif tile == 10 or tile == 12 then
+    -- chests
+        mset(dest_x,dest_y,tile - 1)
+    elseif tile == 13 then
+    --  doors
+        mset(dest_x,dest_y,1)
+    end
 end
