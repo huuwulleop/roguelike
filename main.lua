@@ -23,7 +23,8 @@ function _draw()
 end
 
 function start_game()
-    -- player coord
+    button_buffer = -1
+    -- player start coord
     p_x, p_y = 14,6
     -- offset for move anim
     p_ox, p_oy = 0,0
@@ -42,16 +43,18 @@ end
 -- UPDATES
 ------------
 function update_game()
-    for i = 0,3 do
-        if btnp(i) then
-            move_player(dir_x[i+1], dir_y[i+1])
-            return
-        end
+    if button_buffer == -1 then
+        button_buffer = get_button()
     end
+    do_button(button_buffer)
+    button_buffer = -1
 end
 
 -- move anim
 function update_pturn()
+    if button_buffer == -1 then
+        button_buffer = get_button()
+    end
     -- change speed
     p_timer = min(p_timer + 0.2, 1)
 
@@ -80,6 +83,25 @@ function mov_bump()
     end
     p_ox = p_sox * (time)
     p_oy = p_soy * (time)
+end
+
+function get_button()
+    for i = 0,5 do
+        if btnp(i) then
+            return i
+        end
+    end
+    return -1
+end
+
+function do_button(button)
+    if button < 0 then return end
+
+    if button >= 0 and button < 4 then
+        move_player(dir_x[button+1], dir_y[button+1])
+        return
+    end
+    -- TODO: Menu buttons
 end
 
 
