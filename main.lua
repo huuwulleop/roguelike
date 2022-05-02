@@ -1,11 +1,14 @@
 -- MAIN LOOP
 function _init()
+    time=0
+    p_anim={240,241,242,243}
     _upd = update_game
     _drw = draw_game
     start_game()
 end
 
 function _update()
+    time+=1
     _upd()
 end
 
@@ -49,10 +52,10 @@ function draw_game()
     map()
 
     palt(0, false)
-    -- change color to yel
+    --change color to yel
     pal(6, 10)
-    spr(240, p_x * 8, p_y * 8)
-    pal()
+    spr(p_anim[flr(time/4)%4+1], p_x * 8, p_y * 8)
+    pal() --reset
 end
 
 function draw_gameover()
