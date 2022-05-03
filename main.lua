@@ -46,5 +46,5 @@ function start_game()
 
     -- textboxes
     window={}
-    add_window(64,64,48,16)
+    add_window(32,64,64,24,{"hello world!","this is line 2"})
 end
