@@ -2,9 +2,7 @@
 -- UPDATES
 ------------
 function update_game()
-    if button_buffer == -1 then
-        button_buffer = get_button()
-    end
+    do_button_buffer()
     do_button(button_buffer)
     button_buffer = -1
 end
@@ -12,13 +10,11 @@ end
 
 -- move anim
 function update_pturn()
-    if button_buffer == -1 then
-        button_buffer = get_button()
-    end
+    do_button_buffer()
     -- change speed
     p_timer = min(p_timer + 0.2, 1)
 
-    p_mov()
+    p_mov() -- in gameplay
 
     if p_timer == 1 then
         _upd=update_game
@@ -48,6 +44,13 @@ function mov_bump()
 end
 
 
+function do_button_buffer()
+    if button_buffer == -1 then
+        button_buffer = get_button()
+    end
+end
+
+
 function get_button()
     for i = 0,5 do
         if btnp(i) then
@@ -61,7 +64,7 @@ end
 function do_button(button)
     if button < 0 then return end
 
-    if button >= 0 and button < 4 then
+    if button < 4 then
         move_player(dir_x[button+1], dir_y[button+1])
         return
     end
