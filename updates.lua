@@ -38,13 +38,13 @@ end
 
 -- bump against walls
 function mov_bump()
-    local time = p_timer
+    local timer = p_timer
 
     if p_timer > 0.5 then
-        time = 1 - p_timer
+        timer = 1 - p_timer
     end
-    p_ox = p_sox * (time)
-    p_oy = p_soy * (time)
+    p_ox = p_sox * (timer)
+    p_oy = p_soy * (timer)
 end
 
 
