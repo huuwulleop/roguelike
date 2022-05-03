@@ -2,9 +2,7 @@
 -- UPDATES
 ------------
 function update_game()
-    if button_buffer == -1 then
-        button_buffer = get_button()
-    end
+    do_button_buffer()
     do_button(button_buffer)
     button_buffer = -1
 end
@@ -12,13 +10,11 @@ end
 
 -- move anim
 function update_pturn()
-    if button_buffer == -1 then
-        button_buffer = get_button()
-    end
+    do_button_buffer()
     -- change speed
     p_timer = min(p_timer + 0.2, 1)
 
-    p_mov()
+    p_mov() -- mov walk/bump
 
     if p_timer == 1 then
         _upd=update_game
@@ -31,6 +27,7 @@ end
 
 
 function mov_walk()
+    -- s:starting
     p_ox = p_sox * (1 - p_timer)
     p_oy = p_soy * (1 - p_timer)
 end
@@ -38,13 +35,20 @@ end
 
 -- bump against walls
 function mov_bump()
-    local time = p_timer
+    local timer = p_timer
 
     if p_timer > 0.5 then
-        time = 1 - p_timer
+        timer = 1 - p_timer
     end
-    p_ox = p_sox * (time)
-    p_oy = p_soy * (time)
+    p_ox = p_sox * (timer)
+    p_oy = p_soy * (timer)
+end
+
+
+function do_button_buffer()
+    if button_buffer == -1 then
+        button_buffer = get_button()
+    end
 end
 
 
@@ -61,7 +65,7 @@ end
 function do_button(button)
     if button < 0 then return end
 
-    if button >= 0 and button < 4 then
+    if button < 4 then
         move_player(dir_x[button+1], dir_y[button+1])
         return
     end
