@@ -14,7 +14,7 @@ function update_pturn()
     -- change speed
     p_timer = min(p_timer + 0.2, 1)
 
-    p_mov() -- in gameplay
+    p_mov() -- mov walk/bump
 
     if p_timer == 1 then
         _upd=update_game
@@ -27,6 +27,7 @@ end
 
 
 function mov_walk()
+    -- s:starting
     p_ox = p_sox * (1 - p_timer)
     p_oy = p_soy * (1 - p_timer)
 end

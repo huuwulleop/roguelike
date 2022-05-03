@@ -6,6 +6,7 @@ function move_player(dx,dy)
     local dest_x, dest_y = p_x + dx, p_y + dy
     local tile = mget(dest_x,dest_y)
 
+    -- flip player direction
     if dx < 0 then
         p_flip = true
     elseif dx > 0 then
@@ -54,5 +55,7 @@ function trigger_bump(tile,dest_x,dest_y)
     --  doors
         sfx(62)
         mset(dest_x,dest_y,1)
+    elseif tile == 6 then
+    -- stone tablets
     end
 end

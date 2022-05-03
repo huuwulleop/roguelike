@@ -9,6 +9,7 @@ function add_window(_x,_y,_w,_h,_txt)
     return w
 end
 
+
 function draw_window()
     for w in all(window) do
         -- make the text box
